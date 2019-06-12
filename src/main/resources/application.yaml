@@ -1,0 +1,12 @@
+server:
+  port: 8484
+
+management:
+  endpoints:
+    web:
+      base-path: /
+
+#If you use a database then uncomment below lines and update db properties accordingly
+spring:
+  application:
+    name: Bulk Scan CCD Event Handler Sample Application
