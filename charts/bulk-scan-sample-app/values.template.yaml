@@ -1,0 +1,4 @@
+java:
+  applicationPort: 8484
+  environment:
+    image: ${IMAGE_NAME}

@@ -57,7 +57,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
-  useJUnitPlatform()
   // set your environment variables here
   // environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
@@ -76,7 +75,7 @@ checkstyle {
 }
 
 pmd {
-  toolVersion = "6.9.0"
+  toolVersion = "6.14.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   ruleSetFiles = files("config/pmd/ruleset.xml")
@@ -139,6 +138,8 @@ def versions = [
   springfoxSwagger: '2.9.2'
 ]
 
+ext["rest-assured.version"] = '4.0.0'
+
 dependencyManagement {
   dependencies {
     // CVE-2019-0232 - command line injections on windows - fixed on spring boot master but not released
@@ -174,6 +175,9 @@ dependencies {
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
+  testCompile group: 'com.typesafe', name: 'config', version: '1.3.4'
+  testCompile group: 'org.assertj', name: 'assertj-core', version: '3.12.2'
+  testCompile group: 'io.rest-assured', name: 'rest-assured'
   testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
@@ -182,13 +186,18 @@ dependencies {
   integrationTestCompile sourceSets.test.runtimeClasspath
 
   functionalTestCompile sourceSets.main.runtimeClasspath
+  functionalTestCompile sourceSets.test.runtimeClasspath
 
   smokeTestCompile sourceSets.main.runtimeClasspath
+  smokeTestCompile sourceSets.test.runtimeClasspath
 }
 
-test {
+tasks.withType(Test) {
   useJUnitPlatform()
-  failFast = true
+
+  testLogging {
+    exceptionFormat = 'full'
+  }
 }
 
 mainClassName = 'uk.gov.hmcts.reform.bulkscanccdeventhandler.Application'

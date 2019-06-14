@@ -9,7 +9,7 @@ properties([
 
 def type = "java"
 def product = "bulk-scan"
-def component = "ccd-event-handler-sample-app"
+def component = "sample-app"
 
 withNightlyPipeline(type, product, component) {
   enableSlackNotifications('#bsp-build-notices')
