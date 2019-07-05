@@ -26,3 +26,7 @@ variable "capacity" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "s2s_name" {
+  default = "BULK_SCAN_CCD_SAMPLE_APP"
+}
