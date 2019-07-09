@@ -23,7 +23,7 @@ public class ResultOrErrors<T> {
     }
 
     public static <T> ResultOrErrors<T> result(T result) {
-        return new ResultOrErrors<>(Optional.of(result), emptyList());
+        return new ResultOrErrors<>(Optional.ofNullable(result), emptyList());
     }
 
     public static <T> ResultOrErrors<T> errors(List<String> errors) {
@@ -35,10 +35,10 @@ public class ResultOrErrors<T> {
     }
 
     public boolean isSuccessful() {
-        return result.isPresent();
+        return errors.isEmpty();
     }
 
     public T get() {
-        return result.get();
+        return result.orElse(null);
     }
 }
