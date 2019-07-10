@@ -173,12 +173,17 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-json'
   compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.3'
+  compile group: 'uk.gov.hmcts.reform', name: 'bulk-scan-ccd-event-handler', version: '0.0.1'
+  compile group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '0.0.5'
+  compile group: 'uk.gov.hmcts.reform', name: 'core-case-data-store-client', version: '4.6.4'
+  compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.0.0'
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
 
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.reformLogging
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.0.RELEASE'
+  compile group: 'io.vavr', name: 'vavr', version: '0.10.0'
 
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit

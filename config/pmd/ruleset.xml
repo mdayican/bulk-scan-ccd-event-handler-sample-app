@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <ruleset name="PMD rule set"
-         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+  xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
   <description>HMCTS PMD rule set</description>
 
   <rule ref="category/java/bestpractices.xml">
     <exclude name="GuardLogStatement" />
     <exclude name="JUnitTestContainsTooManyAsserts" />
+
+    <!-- Some tests don't use assertions explicitly, but through RestAssured, for example -->
+    <exclude name="JUnitTestsShouldIncludeAssert" />
   </rule>
   <rule ref="category/java/codestyle.xml">
     <exclude name="AtLeastOneConstructor" />
@@ -17,7 +20,6 @@
     <exclude name="MethodArgumentCouldBeFinal" />
     <exclude name="OnlyOneReturn" />
     <exclude name="TooManyStaticImports" />
-    <exclude name="ConfusingTernary" />
   </rule>
   <rule ref="category/java/codestyle.xml/ClassNamingConventions">
     <properties>
@@ -33,11 +35,6 @@
   <rule ref="category/java/codestyle.xml/ShortVariable">
     <properties>
       <property name="minimum" value="2" />
-    </properties>
-  </rule>
-  <rule ref="category/java/codestyle.xml/VariableNamingConventions">
-    <properties>
-      <property name="violationSuppressRegex" value=".*'log'.*" />
     </properties>
   </rule>
   <rule ref="category/java/design.xml">
