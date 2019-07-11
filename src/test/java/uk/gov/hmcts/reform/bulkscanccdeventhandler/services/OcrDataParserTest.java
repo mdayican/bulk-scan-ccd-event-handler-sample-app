@@ -1,12 +1,16 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,87 +21,110 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+@ExtendWith(MockitoExtension.class)
 public class OcrDataParserTest {
 
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final OcrDataParser ocrDataParser = new OcrDataParser(mapper);
+    @Mock
+    private CcdCollectionParser ccdCollectionParser;
+
+    private OcrDataParser ocrDataParser;
+
+    @BeforeEach
+    public void setUp() {
+        this.ocrDataParser = new OcrDataParser(ccdCollectionParser);
+    }
 
     @Test
     public void should_return_ocr_data_when_valid() {
-        List<Object> rawOcrData = createRawOcrData(
-            ImmutableMap.of("field_1", "value 1", "field_2", "value 2")
-        );
+        // given
+        List<CcdCollectionElement<OcrDataField>> expectedOcrFields = sampleOcrFieldList();
+        given(ccdCollectionParser.parseCcdCollection(any(), eq(OcrDataField.class)))
+            .willReturn(expectedOcrFields);
+
+        Object rawOcrData = new Object();
 
         Map<String, Object> exceptionRecordData = ImmutableMap.of(
             "someProperty", "someValue",
             "scanOCRData", rawOcrData
         );
 
+        // when
         ResultOrErrors<OcrData> result = ocrDataParser.parseOcrData(exceptionRecordData);
 
+        // then
         assertTrue(result.isSuccessful());
 
         OcrData parsedData = result.get();
-        assertThat(parsedData).isNotNull();
+        assertThat(parsedData.fields).isSameAs(expectedOcrFields);
 
-        assertThat(parsedData.fields).isEqualToComparingFieldByFieldRecursively(
-            Arrays.asList(
-                new CcdCollectionElement<>(new OcrDataField("field_1", "value 1")),
-                new CcdCollectionElement<>(new OcrDataField("field_2", "value 2"))
-            )
-        );
+        verify(ccdCollectionParser).parseCcdCollection(rawOcrData, OcrDataField.class);
     }
 
     @Test
     public void should_return_error_when_format_is_invalid() {
-        List<Object> invalidOcrFieldList = Arrays.asList("field1", "field2");
+        // given
+        CcdDataParseException exceptionToThrow = new CcdDataParseException("Test exception", null);
+        willThrow(exceptionToThrow).given(ccdCollectionParser).parseCcdCollection(any(), any());
 
-        Map<String, Object> exceptionRecordData = ImmutableMap.of(
-            "scanOCRData", invalidOcrFieldList
-        );
+        Map<String, Object> exceptionRecordData = ImmutableMap.of("scanOCRData", new Object());
 
+        // when
         ResultOrErrors<OcrData> result = ocrDataParser.parseOcrData(exceptionRecordData);
 
+        // then
         assertFalse(result.isSuccessful());
         assertThat(result.errors).isEqualTo(Arrays.asList("Form OCR data has invalid format"));
     }
 
     @Test
     public void should_return_error_when_null() {
+        // given
         Map<String, Object> exceptionRecordData = new HashMap<>();
         exceptionRecordData.put("scanOCRData", null);
 
+        // when
         ResultOrErrors<OcrData> result = ocrDataParser.parseOcrData(exceptionRecordData);
 
+        // then
         assertFalse(result.isSuccessful());
         assertThat(result.errors).isEqualTo(Arrays.asList("Form OCR data is missing"));
+        verifyNoMoreInteractions(ccdCollectionParser);
     }
 
     @Test
     public void should_return_error_when_absent() {
+        // given
         Map<String, Object> exceptionRecordData = ImmutableMap.of("notOcrData", "some value");
 
+        // when
         ResultOrErrors<OcrData> result = ocrDataParser.parseOcrData(exceptionRecordData);
 
+        // then
         assertFalse(result.isSuccessful());
         assertThat(result.errors).isEqualTo(Arrays.asList("Form OCR data is missing"));
+        verifyNoMoreInteractions(ccdCollectionParser);
     }
 
-    private List<Object> createRawOcrData(Map<String, String> fields) {
-        return fields
-            .entrySet()
-            .stream()
-            .map(
-                entry -> {
-                    Map<String, Object> keyValue = ImmutableMap.of(
-                        "key", entry.getKey(),
-                        "value", entry.getValue()
-                    );
-
-                    return ImmutableMap.of("value", keyValue);
-                }
+    private List<CcdCollectionElement<OcrDataField>> sampleOcrFieldList() {
+        return createCcdElementList(
+            Arrays.asList(
+                new OcrDataField("field_1", "value 1"),
+                new OcrDataField("field_2", "value 2")
             )
+        );
+    }
+
+    private List<CcdCollectionElement<OcrDataField>> createCcdElementList(List<OcrDataField> ocrFields) {
+        return ocrFields
+            .stream()
+            .map(field -> new CcdCollectionElement<>(field))
             .collect(toList());
     }
 }

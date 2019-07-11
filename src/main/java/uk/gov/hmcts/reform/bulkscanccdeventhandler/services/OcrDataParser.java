@@ -1,14 +1,13 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 
-import java.util.List;
 import java.util.Map;
 
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ExceptionRecordFieldNames.SCAN_OCR_DATA;
@@ -22,10 +21,12 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors.r
 @Service
 public class OcrDataParser {
 
-    private final ObjectMapper mapper;
+    private static final Logger log = LoggerFactory.getLogger(OcrDataParser.class);
 
-    public OcrDataParser(ObjectMapper mapper) {
-        this.mapper = mapper;
+    private final CcdCollectionParser ccdCollectionParser;
+
+    public OcrDataParser(CcdCollectionParser ccdCollectionParser) {
+        this.ccdCollectionParser = ccdCollectionParser;
     }
 
     public ResultOrErrors<OcrData> parseOcrData(
@@ -38,26 +39,14 @@ public class OcrDataParser {
         } else {
             try {
                 return result(
-                    new OcrData(convertToOcrFieldList(rawOcrData))
+                    new OcrData(
+                        ccdCollectionParser.parseCcdCollection(rawOcrData, OcrDataField.class)
+                    )
                 );
-            } catch (IllegalArgumentException ex) {
+            } catch (CcdDataParseException e) {
+                log.warn("Failed to parse OCR data", e);
                 return errors("Form OCR data has invalid format");
             }
         }
-    }
-
-    private List<CcdCollectionElement<OcrDataField>> convertToOcrFieldList(Object rawOcrData) {
-        JavaType ccdCollectionElementType =
-            mapper.getTypeFactory().constructParametricType(
-                CcdCollectionElement.class,
-                OcrDataField.class
-            );
-
-        JavaType type = mapper.getTypeFactory().constructParametricType(
-            List.class,
-            ccdCollectionElementType
-        );
-
-        return mapper.convertValue(rawOcrData, type);
     }
 }
