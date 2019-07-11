@@ -84,7 +84,7 @@ public class ScannedDocumentsParserTest {
             scannedDocumentsParser.parseScannedDocuments(exceptionRecordData)
         )
             .isInstanceOf(MalformedRequestException.class)
-            .hasMessage("Failed to parse scanned documents from exception record");
+            .hasMessage("Scanned documents collection in the exception record has invalid format");
     }
 
     @Test

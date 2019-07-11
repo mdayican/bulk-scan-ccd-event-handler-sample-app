@@ -46,7 +46,7 @@ public class ScannedDocumentsParser {
                 return result(scannedDocuments);
             } catch (CcdDataParseException e) {
                 throw new MalformedRequestException(
-                    "Failed to parse scanned documents from exception record",
+                    "Scanned documents collection in the exception record has invalid format",
                     e
                 );
             }
