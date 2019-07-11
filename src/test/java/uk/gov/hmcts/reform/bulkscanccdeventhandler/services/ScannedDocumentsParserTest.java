@@ -9,8 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.MalformedRequestException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -83,7 +83,7 @@ public class ScannedDocumentsParserTest {
         assertThatThrownBy(() ->
             scannedDocumentsParser.parseScannedDocuments(exceptionRecordData)
         )
-            .isInstanceOf(CallbackProcessingException.class)
+            .isInstanceOf(MalformedRequestException.class)
             .hasMessage("Failed to parse scanned documents from exception record");
     }
 

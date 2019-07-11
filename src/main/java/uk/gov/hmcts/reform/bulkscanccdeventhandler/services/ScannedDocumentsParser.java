@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.MalformedRequestException;
 
 import java.util.List;
 import java.util.Map;
@@ -45,7 +45,7 @@ public class ScannedDocumentsParser {
 
                 return result(scannedDocuments);
             } catch (CcdDataParseException e) {
-                throw new CallbackProcessingException(
+                throw new MalformedRequestException(
                     "Failed to parse scanned documents from exception record",
                     e
                 );
