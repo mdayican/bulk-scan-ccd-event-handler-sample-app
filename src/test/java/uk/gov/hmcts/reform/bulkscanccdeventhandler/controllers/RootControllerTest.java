@@ -1,17 +1,16 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.controllers;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(RootController.class)
 public class RootControllerTest {
 
     @Autowired
@@ -19,10 +18,10 @@ public class RootControllerTest {
 
     @DisplayName("Should welcome upon root request with 200 response code")
     @Test
-    public void welcomeRootEndpoint() throws Exception {
-        MvcResult response = mockMvc.perform(get("/")).andExpect(status().isOk()).andReturn();
-
-        assertThat(response.getResponse().getContentAsString()).startsWith("Welcome");
+    void welcomeRootEndpoint() throws Exception {
+        mockMvc.perform(get("/"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("Welcome to bulk-scan-ccd-event-handler-sample-app"));
     }
 }
 
