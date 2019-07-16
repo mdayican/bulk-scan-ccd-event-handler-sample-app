@@ -99,7 +99,7 @@ sonarqube {
     property "sonar.projectKey", "uk.gov.hmcts.reform:bulk-scan-ccd-event-handler-sample-app"
     property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
     property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/integration.exec"
-
+    property "sonar.exclusions", "**/model/*,**/config/**"
   }
 }
 
