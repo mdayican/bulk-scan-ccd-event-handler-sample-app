@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -68,19 +70,18 @@ public class OcrDataParserTest {
     }
 
     @Test
-    public void should_return_error_when_format_is_invalid() {
+    public void should_throw_exception_when_format_is_invalid() {
         // given
         CcdDataParseException exceptionToThrow = new CcdDataParseException("Test exception", null);
         willThrow(exceptionToThrow).given(ccdCollectionParser).parseCcdCollection(any(), any());
 
         Map<String, Object> exceptionRecordData = ImmutableMap.of("scanOCRData", new Object());
 
-        // when
-        ResultOrErrors<OcrData> result = ocrDataParser.parseOcrData(exceptionRecordData);
-
-        // then
-        assertFalse(result.isSuccessful());
-        assertThat(result.errors).isEqualTo(Arrays.asList("Form OCR data has invalid format"));
+        assertThatThrownBy(() ->
+            ocrDataParser.parseOcrData(exceptionRecordData)
+        )
+            .isInstanceOf(CallbackProcessingException.class)
+            .hasMessage("Failed to parse OCR data from exception record");
     }
 
     @Test

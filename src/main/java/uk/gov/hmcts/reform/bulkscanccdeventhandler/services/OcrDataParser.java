@@ -1,11 +1,10 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 
 import java.util.Map;
@@ -20,8 +19,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors.r
  */
 @Service
 public class OcrDataParser {
-
-    private static final Logger log = LoggerFactory.getLogger(OcrDataParser.class);
 
     private final CcdCollectionParser ccdCollectionParser;
 
@@ -44,8 +41,7 @@ public class OcrDataParser {
                     )
                 );
             } catch (CcdDataParseException e) {
-                log.warn("Failed to parse OCR data", e);
-                return errors("Form OCR data has invalid format");
+                throw new CallbackProcessingException("Failed to parse OCR data from exception record", e);
             }
         }
     }
