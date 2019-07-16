@@ -100,6 +100,8 @@ sonarqube {
     property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
     property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/integration.exec"
 
+    // TODO: remove the two model classes from exclusions when they're referenced
+    property "sonar.exclusions", "**/model/BulkScanCase.java,**/model/Address.java,**/config/**"
   }
 }
 
