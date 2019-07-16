@@ -22,7 +22,7 @@ public class OcrValidationControllerTest {
 
     @Test
     void should_return_success_message_when_ocr_data_is_valid() throws Exception {
-        String requestBody = readResource("ocr-data/valid-ocr-data.json");
+        String requestBody = readResource("ocr-data/valid/valid-ocr-data.json");
 
         mockMvc
             .perform(
@@ -33,7 +33,7 @@ public class OcrValidationControllerTest {
             )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(content().json(readResource("ocr-data/valid-ocr-response.json")));
+            .andExpect(content().json(readResource("ocr-data/response/valid-ocr-response.json")));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class OcrValidationControllerTest {
                 post("/validate-ocr-data")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
-                    .content(readResource("ocr-data/ocr-data-without-form-type.json"))
+                    .content(readResource("ocr-data/invalid/missing-form-type.json"))
             )
             .andExpect(status().isBadRequest());
     }
@@ -55,7 +55,7 @@ public class OcrValidationControllerTest {
                 post("/validate-ocr-data")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
-                    .content(readResource("ocr-data/ocr-data-without-ocr-fields.json"))
+                    .content(readResource("ocr-data/invalid/missing-ocr-fields.json"))
             )
             .andExpect(status().isBadRequest());
     }
@@ -67,7 +67,7 @@ public class OcrValidationControllerTest {
                 post("/validate-ocr-data")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
-                    .content(readResource("ocr-data/ocr-data-empty-fields.json"))
+                    .content(readResource("ocr-data/invalid/empty-ocr-fields.json"))
             )
             .andExpect(status().isBadRequest());
     }
@@ -79,7 +79,7 @@ public class OcrValidationControllerTest {
                 post("/validate-ocr-data")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
-                    .content(readResource("ocr-data/ocr-data-invalid-form-type.json"))
+                    .content(readResource("ocr-data/invalid/invalid-form-type.json"))
             )
             .andExpect(status().isBadRequest());
     }
