@@ -1,12 +1,16 @@
 {
   "ocr_data_fields": [
     {
-      "key": "firstName",
+      "key": "first_name",
       "value": "John"
     },
     {
-      "key": "lastName",
+      "key": "last_name",
       "value": "Smith"
+    },
+    {
+      "key": "date_of_birth",
+      "value": "10-10-2000"
     }
   ],
   "form_type": "PERSONAL"

@@ -9,17 +9,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.in.OcrDataValidationRequest;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.OcrDataValidator;
 
+import java.util.List;
 import javax.validation.Valid;
 
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 public class OcrValidationController {
+
+    private final OcrDataValidator ocrDataValidator;
+
+    public OcrValidationController(OcrDataValidator ocrDataValidator) {
+        this.ocrDataValidator = ocrDataValidator;
+    }
 
     @PostMapping(
         path = "/validate-ocr-data",
@@ -36,7 +45,9 @@ public class OcrValidationController {
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
         //TODO: validate s2s token
-        OcrValidationResult result = OcrDataValidator.validate(request.getFormType(), request.getOcrDataFields());
+        List<OcrDataField> ocrDataFields = request.getOcrDataFields();
+        FormType formType = request.getFormType();
+        OcrValidationResult result = ocrDataValidator.validate(formType, ocrDataFields);
 
         return ok().body(new OcrValidationResponse(result.warnings, result.errors, result.status));
     }

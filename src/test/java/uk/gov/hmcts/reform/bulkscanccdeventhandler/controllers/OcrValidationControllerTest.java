@@ -5,24 +5,39 @@ import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.OcrDataValidator;
 
 import java.io.IOException;
 
+import static java.util.Collections.emptyList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus.SUCCESS;
 
 @WebMvcTest(OcrValidationController.class)
-public class OcrValidationControllerTest {
+class OcrValidationControllerTest {
 
     @Autowired
     private transient MockMvc mockMvc;
 
+    @MockBean
+    private OcrDataValidator ocrDataValidator;
+
     @Test
     void should_return_success_message_when_ocr_data_is_valid() throws Exception {
         String requestBody = readResource("ocr-data/valid/valid-ocr-data.json");
+
+        given(ocrDataValidator.validate(eq(FormType.PERSONAL), any()))
+            .willReturn(new OcrValidationResult(emptyList(), emptyList(), SUCCESS));
 
         mockMvc
             .perform(
