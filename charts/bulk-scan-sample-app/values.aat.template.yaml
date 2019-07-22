@@ -1,5 +1,10 @@
 java:
   environment:
+    APPINSIGHTS_INSTRUMENTATIONKEY: "00000000-0000-0000-0000-000000000000"
+    S2S_NAME: "bulk_scan_ccd_sample_app"
+    S2S_URL: "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    CORE_CASE_DATA_API_URL: "http://ccd-data-store-api-aat.service.core-compute-aat.internal"
+
   # Don't modify below here
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}

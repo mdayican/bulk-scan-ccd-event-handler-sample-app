@@ -2,3 +2,9 @@ java:
   applicationPort: 8484
   environment:
     image: ${IMAGE_NAME}
+
+  keyVaults:
+    "s2s":
+      resourceGroup: rpe-service-auth-provider
+      secrets:
+        - microservicekey-bulk-scan-orchestrator

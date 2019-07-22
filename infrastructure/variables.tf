@@ -28,5 +28,5 @@ variable "common_tags" {
 }
 
 variable "s2s_name" {
-  default = "BULK_SCAN_CCD_SAMPLE_APP"
+  default = "bulk_scan_ccd_sample_app"
 }
