@@ -1,0 +1,13 @@
+{
+  "ocr_data_fields": [
+    {
+      "key": "first_name",
+      "value": "John"
+    },
+    {
+      "key": "last_name",
+      "value": "Smith"
+    }
+  ],
+  "form_type": "PERSONAL"
+}
