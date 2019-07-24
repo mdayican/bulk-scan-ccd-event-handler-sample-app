@@ -44,9 +44,9 @@ public class CaseCallbackController {
 
         CaseCreationResult caseCreationResult = callbackHandler.handleCaseCreationCallback(
             callback.caseDetails,
+            callback.eventId,
             idamToken,
             userId,
-            callback.eventId,
             callback.ignoreWarnings
         );
 
