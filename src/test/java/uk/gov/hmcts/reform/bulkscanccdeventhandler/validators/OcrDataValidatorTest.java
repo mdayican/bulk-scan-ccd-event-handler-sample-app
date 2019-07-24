@@ -49,12 +49,12 @@ class OcrDataValidatorTest {
     }
 
     @Test
-    void should_return_errors_when_duplicate_keys_exist() {
+    void should_return_errors_when_ocr_data_contains_duplicate_field_names() {
         // given
         List<OcrDataField> ocrDataFields = asList(
             new OcrDataField(FIRST_NAME, "name"),
-            new OcrDataField(LAST_NAME, "xyz"), //duplicate key
-            new OcrDataField(LAST_NAME, "abc"), //duplicate key
+            new OcrDataField(LAST_NAME, "xyz"), //duplicate field name
+            new OcrDataField(LAST_NAME, "abc"), //duplicate field name
             new OcrDataField(DATE_OF_BIRTH, "01-01-1990")
         );
 
@@ -66,7 +66,7 @@ class OcrDataValidatorTest {
         assertThat(result)
             .extracting("errors", "warnings", "status")
             .containsExactly(
-                singletonList("Invalid OCR data. Duplicate keys exist: last_name"),
+                singletonList("Invalid OCR data. Duplicate fields exist: last_name"),
                 emptyList(),
                 ValidationStatus.ERRORS
             );

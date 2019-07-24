@@ -65,7 +65,7 @@ public class OcrFieldRetriever {
         return ocrData
             .fields
             .stream()
-            .filter(e -> fieldName.equals(e.value.key))
+            .filter(e -> fieldName.equals(e.value.name))
             .collect(toList());
     }
 }

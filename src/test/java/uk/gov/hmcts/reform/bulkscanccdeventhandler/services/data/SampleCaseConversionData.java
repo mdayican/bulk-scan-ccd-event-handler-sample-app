@@ -153,11 +153,11 @@ public final class SampleCaseConversionData {
             PARSED_SCANNED_DOCUMENTS
         );
 
-    private static Map<String, Object> rawOcrField(String key, String value) {
+    private static Map<String, Object> rawOcrField(String name, String value) {
         return ImmutableMap.of(
             "value",
             ImmutableMap.of(
-                "key", key,
+                "name", name,
                 "value", value
             )
         );

@@ -6,17 +6,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class OcrDataField {
 
     @JsonProperty
-    public final String key;
+    public final String name;
 
     @JsonProperty
     public final String value;
 
     @JsonCreator
     public OcrDataField(
-        @JsonProperty("key") String key,
+        @JsonProperty("name") String name,
         @JsonProperty("value") String value
     ) {
-        this.key = key;
+        this.name = name;
         this.value = value;
     }
 }

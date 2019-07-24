@@ -127,7 +127,7 @@ public class CaseTransformerTest {
             "jurisdiction1",
             "state1",
             "caseTypeId1",
-            ImmutableMap.of("key1", "value1")
+            ImmutableMap.of("name1", "value1")
         );
     }
 

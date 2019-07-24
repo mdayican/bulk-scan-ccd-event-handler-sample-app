@@ -138,7 +138,7 @@ public class CaseCreationCallbackHandlerTest {
             .jurisdiction("jurisdiction1")
             .state("state1")
             .caseTypeId("caseTypeId1")
-            .data(ImmutableMap.of("key1", "value1"))
+            .data(ImmutableMap.of("name1", "value1"))
             .build();
     }
 }

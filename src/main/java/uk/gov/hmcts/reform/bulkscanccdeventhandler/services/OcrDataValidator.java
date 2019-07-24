@@ -38,9 +38,9 @@ public class OcrDataValidator {
     private static final Logger log = LoggerFactory.getLogger(OcrDataValidator.class);
 
     public OcrValidationResult validate(FormType formType, List<OcrDataField> ocrData) {
-        List<String> duplicateOcrKeys = OcrFormValidationHelper.findDuplicateOcrKeys(ocrData);
+        List<String> duplicateOcrFields = OcrFormValidationHelper.findDuplicateOcrFields(ocrData);
 
-        if (duplicateOcrKeys.isEmpty()) {
+        if (duplicateOcrFields.isEmpty()) {
             List<String> errors = validateMandatoryFields(formType, ocrData);
             List<String> warnings = validateOptionalFields(formType, ocrData);
 
@@ -48,10 +48,10 @@ public class OcrDataValidator {
                 warnings, errors, getValidationStatus(!errors.isEmpty(), !warnings.isEmpty())
             );
         } else {
-            String duplicateKeys = String.join(",", duplicateOcrKeys);
-            log.info("Found duplicate keys in OCR data. {}", duplicateKeys);
+            String duplicateFields = String.join(",", duplicateOcrFields);
+            log.info("Found duplicate fields in OCR data. {}", duplicateFields);
 
-            String errorMessage = String.format("Invalid OCR data. Duplicate keys exist: %s", duplicateKeys);
+            String errorMessage = String.format("Invalid OCR data. Duplicate fields exist: %s", duplicateFields);
             return new OcrValidationResult(emptyList(), singletonList(errorMessage), ERRORS);
         }
     }

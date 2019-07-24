@@ -22,7 +22,7 @@ public final class OcrFormValidationHelper {
     public static List<String> getOcrFieldNames(List<OcrDataField> ocrData) {
         return ocrData
             .stream()
-            .map(field -> field.key)
+            .map(field -> field.name)
             .collect(toList());
     }
 
@@ -43,7 +43,7 @@ public final class OcrFormValidationHelper {
     public static String findOcrFormFieldValue(String fieldName, List<OcrDataField> ocrData) {
         return ocrData
             .stream()
-            .filter(e -> fieldName.equals(e.key))
+            .filter(e -> fieldName.equals(e.name))
             .findFirst()
             .map(v -> v.value)
             .orElse(null);
@@ -57,10 +57,10 @@ public final class OcrFormValidationHelper {
         return Pattern.compile("\\d{10}").matcher(phone).matches();
     }
 
-    public static List<String> findDuplicateOcrKeys(List<OcrDataField> ocrKeys) {
-        return ocrKeys
+    public static List<String> findDuplicateOcrFields(List<OcrDataField> ocrFields) {
+        return ocrFields
             .stream()
-            .collect(groupingBy(it -> it.key, counting()))
+            .collect(groupingBy(it -> it.name, counting()))
             .entrySet()
             .stream()
             .filter(entry -> entry.getValue() > 1)

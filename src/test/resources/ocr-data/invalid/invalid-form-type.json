@@ -1,11 +1,11 @@
 {
   "ocr_data_fields": [
     {
-      "key": "firstName",
+      "name": "firstName",
       "value": "John"
     },
     {
-      "key": "lastName",
+      "name": "lastName",
       "value": "Smith"
     }
   ],

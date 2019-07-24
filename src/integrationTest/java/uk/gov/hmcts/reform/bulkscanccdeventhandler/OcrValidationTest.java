@@ -57,7 +57,7 @@ class OcrValidationTest {
             .andExpect(jsonPath("$.status").value("ERRORS"))
             .andExpect(jsonPath("$.warnings", hasSize(0)))
             .andExpect(jsonPath("$.errors", hasSize(1)))
-            .andExpect(jsonPath("$.errors[0]").value("Invalid OCR data. Duplicate keys exist: last_name"));
+            .andExpect(jsonPath("$.errors[0]").value("Invalid OCR data. Duplicate fields exist: last_name"));
     }
 
     @Test
