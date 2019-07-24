@@ -1,0 +1,17 @@
+{
+  "event_id": "createNewCase",
+  "case_details": {
+    "id": 1539007368674134,
+    "jurisdiction": "BULKSCAN",
+    "state": "ScannedRecordFound",
+    "case_type_id": "Bulk_Scanned",
+    "created_date": "2018-10-08T14:02:48.609",
+    "last_modified": "2018-10-08T14:19:38.758",
+    "security_classification": "PUBLIC",
+    "case_data": {
+      "scanOCRData": [],
+      "scannedDocuments": []
+    }
+  },
+  "ignore_warning": true
+}
