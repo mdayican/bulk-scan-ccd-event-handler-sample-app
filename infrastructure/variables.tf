@@ -30,3 +30,7 @@ variable "common_tags" {
 variable "s2s_name" {
   default = "bulk_scan_ccd_sample_app"
 }
+
+variable "test_s2s_name" {
+  default = "bulk_scan_sample_app_tests"
+}
