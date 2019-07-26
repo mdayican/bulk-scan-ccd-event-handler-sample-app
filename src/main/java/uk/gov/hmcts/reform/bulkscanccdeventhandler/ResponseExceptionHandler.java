@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.FormNotFoundException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -30,6 +32,12 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<String> handleUnauthenticatedException(UnauthenticatedException exc) {
         log.warn(exc.getMessage(), exc);
         return status(UNAUTHORIZED).build();
+    }
+
+    @ExceptionHandler(FormNotFoundException.class)
+    protected ResponseEntity<String> handleFormNotFoundException(FormNotFoundException exc) {
+        log.warn(exc.getMessage(), exc);
+        return status(NOT_FOUND).build();
     }
 
     @ExceptionHandler(ForbiddenException.class)

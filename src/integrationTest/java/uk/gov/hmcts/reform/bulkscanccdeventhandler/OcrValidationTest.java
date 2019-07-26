@@ -34,7 +34,7 @@ class OcrValidationTest {
         String content = readResource("ocr-data/valid/valid-ocr-data.json");
 
         mvc.perform(
-            post("/validate-ocr-data")
+            post("/forms/PERSONAL/validate-ocr")
                 .header("ServiceAuthorization", "auth-header-value")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
@@ -49,7 +49,7 @@ class OcrValidationTest {
         String content = readResource("ocr-data/invalid/duplicate-fields.json");
 
         mvc.perform(
-            post("/validate-ocr-data")
+            post("/forms/PERSONAL/validate-ocr")
                 .header("ServiceAuthorization", "auth-header-value")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
@@ -65,7 +65,7 @@ class OcrValidationTest {
         String content = readResource("ocr-data/invalid/missing-mandatory-fields.json");
 
         mvc.perform(
-            post("/validate-ocr-data")
+            post("/forms/PERSONAL/validate-ocr")
                 .header("ServiceAuthorization", "auth-header-value")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
@@ -81,7 +81,7 @@ class OcrValidationTest {
         String content = readResource("ocr-data/invalid/missing-optional-fields.json");
 
         mvc.perform(
-            post("/validate-ocr-data")
+            post("/forms/PERSONAL/validate-ocr")
                 .header("ServiceAuthorization", "auth-header-value")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
@@ -97,7 +97,7 @@ class OcrValidationTest {
         String content = readResource("ocr-data/invalid/missing-optional-fields.json");
 
         mvc.perform(
-            post("/validate-ocr-data")
+            post("/forms/PERSONAL/validate-ocr")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
             .andExpect(status().isUnauthorized());

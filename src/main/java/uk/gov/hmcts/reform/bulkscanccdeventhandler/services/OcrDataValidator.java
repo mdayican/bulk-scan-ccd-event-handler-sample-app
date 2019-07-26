@@ -100,8 +100,6 @@ public class OcrDataValidator {
                 LAST_NAME
             );
         }
-        //TODO: Change ocr validation controller to have formType as a path parameter
-        // or throw exception for invalid form type
 
         log.info("Invalid Form type {}", formType);
         return emptyList();

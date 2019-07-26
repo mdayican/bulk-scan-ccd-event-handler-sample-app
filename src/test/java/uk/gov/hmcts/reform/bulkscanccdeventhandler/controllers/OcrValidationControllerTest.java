@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult;
@@ -19,6 +20,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.Unauthenti
 import java.io.IOException;
 
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -46,7 +48,7 @@ class OcrValidationControllerTest {
 
         mockMvc
             .perform(
-                post("/validate-ocr-data")
+                post("/forms/PERSONAL/validate-ocr")
                     .header("ServiceAuthorization", "")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(requestBody)
@@ -61,7 +63,7 @@ class OcrValidationControllerTest {
 
         mockMvc
             .perform(
-                post("/validate-ocr-data")
+                post("/forms/PERSONAL/validate-ocr")
                     .header("ServiceAuthorization", "test-token")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(requestBody)
@@ -76,7 +78,7 @@ class OcrValidationControllerTest {
 
         mockMvc
             .perform(
-                post("/validate-ocr-data")
+                post("/forms/PERSONAL/validate-ocr")
                     .header("ServiceAuthorization", "test-token")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(requestBody)
@@ -95,7 +97,7 @@ class OcrValidationControllerTest {
 
         mockMvc
             .perform(
-                post("/validate-ocr-data")
+                post("/forms/PERSONAL/validate-ocr")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(requestBody)
@@ -106,24 +108,11 @@ class OcrValidationControllerTest {
     }
 
     @Test
-    void should_return_bad_request_when_form_type_is_missing() throws Exception {
-        given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
-        mockMvc
-            .perform(
-                post("/validate-ocr-data")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .header("ServiceAuthorization", "testServiceAuthHeader")
-                    .content(readResource("ocr-data/invalid/missing-form-type.json"))
-            )
-            .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void should_return_bad_request_with_ocr_fields_are_missing() throws Exception {
         given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
         mockMvc
             .perform(
-                post("/validate-ocr-data")
+                post("/forms/PERSONAL/validate-ocr")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/missing-ocr-fields.json"))
@@ -136,7 +125,7 @@ class OcrValidationControllerTest {
         given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
         mockMvc
             .perform(
-                post("/validate-ocr-data")
+                post("/forms/PERSONAL/validate-ocr")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/empty-ocr-fields.json"))
@@ -145,16 +134,19 @@ class OcrValidationControllerTest {
     }
 
     @Test
-    void should_return_bad_request_when_form_type_is_invalid() throws Exception {
+    void should_return_form_not_found_exception_when_form_type_is_invalid() throws Exception {
         given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
-        mockMvc
+        MvcResult mvcResult = mockMvc
             .perform(
-                post("/validate-ocr-data")
+                post("/forms/invalid-form-type/validate-ocr")
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header("ServiceAuthorization", "testServiceAuthHeader")
                     .content(readResource("ocr-data/invalid/invalid-form-type.json"))
             )
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+        assertThat(mvcResult.getResolvedException().getMessage()).contains("Form type 'invalid-form-type' not found");
     }
 
     private String readResource(final String fileName) throws IOException {
