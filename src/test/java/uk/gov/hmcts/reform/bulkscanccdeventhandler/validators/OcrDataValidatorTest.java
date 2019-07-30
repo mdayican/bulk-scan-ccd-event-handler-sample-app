@@ -15,13 +15,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType.CONTACT;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType.PERSONAL;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.ADDRESS_LINE_1;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.ADDRESS_LINE_2;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.ADDRESS_LINE_3;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.CONTACT_NUMBER;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.COUNTRY;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.COUNTY;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.DATE_OF_BIRTH;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.EMAIL;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.FIRST_NAME;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.LAST_NAME;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.POST_CODE;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrFieldNames.POST_TOWN;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus.ERRORS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus.SUCCESS;
 
@@ -161,7 +165,11 @@ class OcrDataValidatorTest {
         // given
         List<OcrDataField> ocrDataFields = asList(
             new OcrDataField(ADDRESS_LINE_1, "1 Street"),
+            new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
+            new OcrDataField(ADDRESS_LINE_3, "London"),
+            new OcrDataField(POST_TOWN, "LONDON"),
             new OcrDataField(POST_CODE, "SW1 1ER"),
+            new OcrDataField(COUNTY, "county"),
             new OcrDataField(COUNTRY, "UK"),
             new OcrDataField(EMAIL, "xyz"), //invalid email address
             new OcrDataField(CONTACT_NUMBER, "0123456789")
@@ -186,7 +194,11 @@ class OcrDataValidatorTest {
         // given
         List<OcrDataField> ocrDataFields = asList(
             new OcrDataField(ADDRESS_LINE_1, "1 Street"),
+            new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
+            new OcrDataField(ADDRESS_LINE_3, "London"),
+            new OcrDataField(POST_TOWN, "LONDON"),
             new OcrDataField(POST_CODE, "SW1 1ER"),
+            new OcrDataField(COUNTY, "county"),
             new OcrDataField(COUNTRY, "UK"),
             new OcrDataField(EMAIL, "test@test.com"),
             new OcrDataField(CONTACT_NUMBER, "invalid") //invalid phone number
@@ -207,11 +219,45 @@ class OcrDataValidatorTest {
     }
 
     @Test
-    void should_return_success_when_contact_form_fields_format_is_valid() {
+    void should_return_warnings_when_contact_form_optional_fields_are_missing() {
         // given
         List<OcrDataField> ocrDataFields = asList(
             new OcrDataField(ADDRESS_LINE_1, "1 Street"),
             new OcrDataField(POST_CODE, "SW1 1ER"),
+            new OcrDataField(COUNTY, "county"),
+            new OcrDataField(COUNTRY, "UK"),
+            new OcrDataField(EMAIL, "test@test.com"),
+            new OcrDataField(CONTACT_NUMBER, "0123456789")
+        );
+
+        // when
+        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result)
+            .extracting("errors", "warnings", "status")
+            .containsExactly(
+                emptyList(),
+                asList(
+                    "address_line_2 is missing",
+                    "address_line_3 is missing",
+                    "post_town is missing"
+                ),
+                ValidationStatus.WARNINGS
+            );
+    }
+
+    @Test
+    void should_return_success_when_contact_form_fields_format_is_valid() {
+        // given
+        List<OcrDataField> ocrDataFields = asList(
+            new OcrDataField(ADDRESS_LINE_1, "1 Street"),
+            new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
+            new OcrDataField(ADDRESS_LINE_3, "London"),
+            new OcrDataField(POST_TOWN, "LONDON"),
+            new OcrDataField(POST_CODE, "SW1 1ER"),
+            new OcrDataField(COUNTY, "county"),
             new OcrDataField(COUNTRY, "UK"),
             new OcrDataField(EMAIL, "test@test.com"), //valid email format
             new OcrDataField(CONTACT_NUMBER, "0123456789") //valid phone number format

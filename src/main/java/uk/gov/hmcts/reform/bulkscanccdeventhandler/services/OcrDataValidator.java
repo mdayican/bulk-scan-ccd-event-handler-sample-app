@@ -108,11 +108,10 @@ public class OcrDataValidator {
     private List<String> getOptionalFieldsForForm(FormType formType) {
         if (formType.equals(CONTACT)) {
             return asList(
-                OcrFieldNames.ADDRESS_LINE_1,
-                OcrFieldNames.EMAIL,
-                OcrFieldNames.POST_CODE,
-                OcrFieldNames.COUNTRY,
-                OcrFieldNames.CONTACT_NUMBER
+                OcrFieldNames.ADDRESS_LINE_2,
+                OcrFieldNames.ADDRESS_LINE_3,
+                OcrFieldNames.POST_TOWN,
+                OcrFieldNames.COUNTY
             );
         } else if (formType.equals(PERSONAL)) {
             return singletonList(OcrFieldNames.DATE_OF_BIRTH);
