@@ -23,4 +23,4 @@ idam:
     secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
     name:   ${S2S_NAME:bulk_scan_ccd_sample_app}
 
-allowed-services: bulk_scan_processor,bulk_scan_processor_test
+allowed-services: bulk_scan_processor,bulk_scan_sample_app_tests

@@ -16,7 +16,7 @@ properties([
 ])
 
 List<LinkedHashMap<String, Object>> secrets = [
-  secret('test-s2s-secret', 'TEST_S2S_SECRET')
+  secret('bulk-scan-sample-app-tests-s2s-secret', 'TEST_S2S_SECRET')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {

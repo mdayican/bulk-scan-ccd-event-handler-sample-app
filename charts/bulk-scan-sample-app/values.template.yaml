@@ -2,9 +2,10 @@ java:
   applicationPort: 8484
   environment:
     image: ${IMAGE_NAME}
+    S2S_NAME: "bulk_scan_ccd_sample_app"
 
   keyVaults:
     "s2s":
       resourceGroup: rpe-service-auth-provider
       secrets:
-        - microservicekey-bulk-scan-orchestrator
+        - microservicekey-bulk-scan-sample-app-tests
