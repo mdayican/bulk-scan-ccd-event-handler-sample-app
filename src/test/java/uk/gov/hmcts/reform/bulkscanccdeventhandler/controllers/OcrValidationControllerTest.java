@@ -15,6 +15,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.AuthService;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.FormNotFoundException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
 import java.io.IOException;
@@ -144,9 +145,12 @@ class OcrValidationControllerTest {
                     .content(readResource("ocr-data/invalid/invalid-form-type.json"))
             )
             .andExpect(status().isNotFound())
+            .andExpect(content().string("Form type 'invalid-form-type' not found"))
             .andReturn();
 
-        assertThat(mvcResult.getResolvedException().getMessage()).contains("Form type 'invalid-form-type' not found");
+        assertThat(mvcResult.getResolvedException())
+            .isInstanceOf(FormNotFoundException.class)
+            .hasMessageContaining("Form type 'invalid-form-type' not found");
     }
 
     private String readResource(final String fileName) throws IOException {

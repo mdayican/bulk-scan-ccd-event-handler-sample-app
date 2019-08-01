@@ -93,6 +93,23 @@ class OcrValidationTest {
     }
 
     @Test
+    void should_return_errors_when_ocr_form_data_validation_failed_with_invalid_data_format() throws Throwable {
+        String content = readResource("ocr-data/invalid/invalid-data-format.json");
+
+        mvc.perform(
+            post("/forms/CONTACT/validate-ocr")
+                .header("ServiceAuthorization", "auth-header-value")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value("ERRORS"))
+            .andExpect(jsonPath("$.warnings", hasSize(0)))
+            .andExpect(jsonPath("$.errors", hasSize(2)))
+            .andExpect(jsonPath("$.errors[0]").value("Invalid email address"))
+            .andExpect(jsonPath("$.errors[1]").value("Invalid phone number"));
+    }
+
+    @Test
     void should_return_401_when_service_auth_header_is_missing() throws Throwable {
         String content = readResource("ocr-data/invalid/missing-optional-fields.json");
 

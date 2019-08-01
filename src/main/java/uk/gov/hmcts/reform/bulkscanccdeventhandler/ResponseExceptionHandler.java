@@ -23,21 +23,21 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(ResponseExceptionHandler.class);
 
     @ExceptionHandler(InvalidTokenException.class)
-    protected ResponseEntity<Void> handleInvalidTokenException(InvalidTokenException exc) {
+    protected ResponseEntity<String> handleInvalidTokenException(InvalidTokenException exc) {
         log.warn(exc.getMessage(), exc);
-        return status(UNAUTHORIZED).build();
+        return status(UNAUTHORIZED).body(exc.getMessage());
     }
 
     @ExceptionHandler(UnauthenticatedException.class)
     protected ResponseEntity<String> handleUnauthenticatedException(UnauthenticatedException exc) {
         log.warn(exc.getMessage(), exc);
-        return status(UNAUTHORIZED).build();
+        return status(UNAUTHORIZED).body(exc.getMessage());
     }
 
     @ExceptionHandler(FormNotFoundException.class)
     protected ResponseEntity<String> handleFormNotFoundException(FormNotFoundException exc) {
         log.warn(exc.getMessage(), exc);
-        return status(NOT_FOUND).build();
+        return status(NOT_FOUND).body(exc.getMessage());
     }
 
     @ExceptionHandler(ForbiddenException.class)
