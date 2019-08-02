@@ -1,10 +1,8 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
 import java.util.List;
 

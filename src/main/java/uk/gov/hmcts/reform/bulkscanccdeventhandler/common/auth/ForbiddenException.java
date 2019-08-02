@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth;
 
 public class ForbiddenException extends RuntimeException {
 

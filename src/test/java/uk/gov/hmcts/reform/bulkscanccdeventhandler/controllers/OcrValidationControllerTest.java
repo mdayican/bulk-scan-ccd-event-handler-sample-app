@@ -10,14 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.controllers.OcrValidationController;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.AuthService;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
 import java.io.IOException;
 

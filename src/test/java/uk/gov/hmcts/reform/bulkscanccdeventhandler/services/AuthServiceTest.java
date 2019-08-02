@@ -8,8 +8,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.AuthService;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
