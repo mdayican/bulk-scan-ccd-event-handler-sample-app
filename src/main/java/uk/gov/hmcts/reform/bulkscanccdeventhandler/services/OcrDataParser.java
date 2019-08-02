@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.services;
 
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 

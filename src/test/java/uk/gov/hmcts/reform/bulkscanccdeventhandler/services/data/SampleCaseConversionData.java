@@ -6,8 +6,8 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.BulkScanCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

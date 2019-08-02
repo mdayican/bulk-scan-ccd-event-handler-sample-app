@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

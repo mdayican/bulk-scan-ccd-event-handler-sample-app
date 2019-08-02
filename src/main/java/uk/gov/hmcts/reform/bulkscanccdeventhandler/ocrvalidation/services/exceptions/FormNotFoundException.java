@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions;
 
 public class FormNotFoundException extends RuntimeException {
 

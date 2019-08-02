@@ -8,8 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrData;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ResultOrErrors;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CallbackProcessingException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.CcdDataParseException;
 
@@ -78,7 +78,7 @@ public class OcrDataParserTest {
         Map<String, Object> exceptionRecordData = ImmutableMap.of("scanOCRData", new Object());
 
         assertThatThrownBy(() ->
-            ocrDataParser.parseOcrData(exceptionRecordData)
+                               ocrDataParser.parseOcrData(exceptionRecordData)
         )
             .isInstanceOf(CallbackProcessingException.class)
             .hasMessage("Failed to parse OCR data from exception record");

@@ -1,4 +1,6 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services;
+
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus;
 
 import java.util.List;
 

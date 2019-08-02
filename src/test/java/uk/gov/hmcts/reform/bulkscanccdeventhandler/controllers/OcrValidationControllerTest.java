@@ -10,12 +10,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.controllers.OcrValidationController;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.AuthService;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.OcrDataValidator;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.ForbiddenException;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.FormNotFoundException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.UnauthenticatedException;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.ValidationStatus.SUCCESS;
+import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.SUCCESS;
 
 @WebMvcTest(OcrValidationController.class)
 class OcrValidationControllerTest {

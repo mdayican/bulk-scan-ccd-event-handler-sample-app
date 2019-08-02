@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.controllers;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.FormType;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.in.OcrDataValidationRequest;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResponse;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.out.OcrValidationResult;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataValidationRequest;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.OcrValidationResponse;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrDataValidator;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.OcrValidationResult;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.AuthService;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.OcrDataValidator;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.services.exception.FormNotFoundException;
 
 import javax.validation.Valid;
 

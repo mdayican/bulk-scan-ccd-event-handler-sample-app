@@ -1,7 +1,7 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.util;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services;
 
 import org.apache.commons.validator.routines.EmailValidator;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.OcrDataField;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 
 import java.util.Collection;
 import java.util.List;
