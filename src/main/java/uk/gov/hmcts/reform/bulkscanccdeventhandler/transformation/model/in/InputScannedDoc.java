@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 
-public class ScannedDocument {
+public class InputScannedDoc {
 
     public final String type;
     public final String subtype;
@@ -14,7 +14,7 @@ public class ScannedDocument {
     public final LocalDateTime scannedDate;
     public final LocalDateTime deliveryDate;
 
-    public ScannedDocument(
+    public InputScannedDoc(
         @JsonProperty("type") String type,
         @JsonProperty("subtype") String subtype,
         @JsonProperty("url") String url,

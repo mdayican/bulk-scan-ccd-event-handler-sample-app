@@ -15,7 +15,7 @@ public class ExceptionRecord {
     public final JourneyClassification journeyClassification;
     public final LocalDateTime deliveryDate;
     public final LocalDateTime openingDate;
-    public final List<ScannedDocument> scannedDocuments;
+    public final List<InputScannedDoc> scannedDocuments;
     public final List<OcrDataField> ocrDataFields;
 
     public ExceptionRecord(
@@ -26,7 +26,7 @@ public class ExceptionRecord {
         @JsonProperty("journey_classification") JourneyClassification journeyClassification,
         @JsonProperty("delivery_date") LocalDateTime deliveryDate,
         @JsonProperty("opening_date") LocalDateTime openingDate,
-        @JsonProperty("scanned_documents") List<ScannedDocument> scannedDocuments,
+        @JsonProperty("scanned_documents") List<InputScannedDoc> scannedDocuments,
         @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields
     ) {
         this.id = id;
