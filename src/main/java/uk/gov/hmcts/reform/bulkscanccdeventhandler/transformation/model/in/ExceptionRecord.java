@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ExceptionRecord {
 
+    public final String id;
     public final String caseTypeId;
     public final String poBox;
     public final String jurisdiction;
@@ -18,6 +19,7 @@ public class ExceptionRecord {
     public final List<OcrDataField> ocrDataFields;
 
     public ExceptionRecord(
+        @JsonProperty("id") String id,
         @JsonProperty("case_type_id") String caseTypeId,
         @JsonProperty("po_box") String poBox,
         @JsonProperty("po_box_jurisdiction") String jurisdiction,
@@ -27,6 +29,7 @@ public class ExceptionRecord {
         @JsonProperty("scanned_documents") List<ScannedDocument> scannedDocuments,
         @JsonProperty("ocr_data_fields") List<OcrDataField> ocrDataFields
     ) {
+        this.id = id;
         this.caseTypeId = caseTypeId;
         this.poBox = poBox;
         this.jurisdiction = jurisdiction;

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.SampleCase;
 
 public class CaseCreationDetails {
 
@@ -11,13 +12,13 @@ public class CaseCreationDetails {
     public final String eventId;
 
     @JsonProperty("case_data")
-    public final Object caseData;
+    public final SampleCase caseData;
 
     // region constructor
     public CaseCreationDetails(
         String caseTypeId,
         String eventId,
-        Object caseData
+        SampleCase caseData
     ) {
         this.caseTypeId = caseTypeId;
         this.eventId = eventId;

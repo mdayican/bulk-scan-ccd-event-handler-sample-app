@@ -26,6 +26,7 @@ public class ModelTest {
     public void requestModelTest() {
         ExceptionRecord exceptionRecord =
             new ExceptionRecord(
+                "er-id",
                 "caseType",
                 "poBox",
                 "jurisdiction",
@@ -59,7 +60,7 @@ public class ModelTest {
                 new CaseCreationDetails(
                     "caseTypeId",
                     "eventId",
-                    "foo"
+                    null
                 ),
                 emptyList()
             );
