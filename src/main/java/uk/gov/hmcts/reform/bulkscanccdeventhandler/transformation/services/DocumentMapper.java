@@ -15,17 +15,21 @@ public class DocumentMapper {
         InputScannedDoc exceptionRecordDoc,
         String exceptionRecordReference
     ) {
-        return new CcdCollectionElement<>(
-            new ScannedDocument(
-                exceptionRecordDoc.type,
-                exceptionRecordDoc.subtype,
-                exceptionRecordDoc.url,
-                exceptionRecordDoc.controlNumber,
-                exceptionRecordDoc.fileName,
-                exceptionRecordDoc.scannedDate,
-                exceptionRecordDoc.deliveryDate,
-                exceptionRecordReference
-            )
-        );
+        if (exceptionRecordDoc == null) {
+            return null;
+        } else {
+            return new CcdCollectionElement<>(
+                new ScannedDocument(
+                    exceptionRecordDoc.type,
+                    exceptionRecordDoc.subtype,
+                    exceptionRecordDoc.url,
+                    exceptionRecordDoc.controlNumber,
+                    exceptionRecordDoc.fileName,
+                    exceptionRecordDoc.scannedDate,
+                    exceptionRecordDoc.deliveryDate,
+                    exceptionRecordReference
+                )
+            );
+        }
     }
 }
