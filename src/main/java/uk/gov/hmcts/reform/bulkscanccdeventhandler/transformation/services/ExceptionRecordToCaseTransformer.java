@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CaseCreationDetails;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 
 import static java.util.Collections.emptyList;

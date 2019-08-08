@@ -6,12 +6,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.Address;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.ExceptionRecord;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.JourneyClassification;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CcdCollectionElement;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 
 import static java.time.LocalDateTime.now;
@@ -33,8 +34,8 @@ public class ExceptionRecordToCaseTransformerTest {
     @Mock private AddressExtractor addressExtractor;
     @Mock private ExceptionRecordValidator validator;
 
-    @Mock private CcdCollectionElement<uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument> doc1;
-    @Mock private CcdCollectionElement<uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument> doc2;
+    @Mock private CcdCollectionElement<ScannedDocument> doc1;
+    @Mock private CcdCollectionElement<ScannedDocument> doc2;
     @Mock private Address address;
 
     private ExceptionRecordToCaseTransformer service;

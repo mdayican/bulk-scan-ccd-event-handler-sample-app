@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.SampleCase;
 
 public class CaseCreationDetails {
 

@@ -1,8 +1,4 @@
-package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
-
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.Address;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.CcdCollectionElement;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.ScannedDocument;
+package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out;
 
 import java.util.List;
 

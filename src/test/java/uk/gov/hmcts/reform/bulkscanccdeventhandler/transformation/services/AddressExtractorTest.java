@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.model.Address;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
 
 import java.util.Collections;
 import java.util.List;
