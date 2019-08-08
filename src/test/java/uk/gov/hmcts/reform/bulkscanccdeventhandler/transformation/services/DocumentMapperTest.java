@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services;
 
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 
 import static java.time.LocalDateTime.now;
@@ -20,18 +19,18 @@ public class DocumentMapperTest {
         String refId = "ref-id";
 
         // when
-        CcdCollectionElement<ScannedDocument> output = mapper.toCaseDoc(input, refId);
+        ScannedDocument output = mapper.toCaseDoc(input, refId);
 
         // then
         assertSoftly(softly -> {
-            softly.assertThat(output.value.type).isEqualTo(input.type);
-            softly.assertThat(output.value.subtype).isEqualTo(input.subtype);
-            softly.assertThat(output.value.url).isEqualTo(input.url);
-            softly.assertThat(output.value.controlNumber).isEqualTo(input.controlNumber);
-            softly.assertThat(output.value.fileName).isEqualTo(input.fileName);
-            softly.assertThat(output.value.deliveryDate).isEqualTo(input.deliveryDate);
-            softly.assertThat(output.value.scannedDate).isEqualTo(input.scannedDate);
-            softly.assertThat(output.value.exceptionRecordReference).isEqualTo(refId);
+            softly.assertThat(output.type).isEqualTo(input.type);
+            softly.assertThat(output.subtype).isEqualTo(input.subtype);
+            softly.assertThat(output.url).isEqualTo(input.url);
+            softly.assertThat(output.controlNumber).isEqualTo(input.controlNumber);
+            softly.assertThat(output.fileName).isEqualTo(input.fileName);
+            softly.assertThat(output.deliveryDate).isEqualTo(input.deliveryDate);
+            softly.assertThat(output.scannedDate).isEqualTo(input.scannedDate);
+            softly.assertThat(output.exceptionRecordReference).isEqualTo(refId);
         });
     }
 
@@ -42,7 +41,7 @@ public class DocumentMapperTest {
         String refId = "ref-id";
 
         // when
-        CcdCollectionElement<ScannedDocument> output = mapper.toCaseDoc(input, refId);
+        ScannedDocument output = mapper.toCaseDoc(input, refId);
 
         // then
         assertThat(output).isNull();

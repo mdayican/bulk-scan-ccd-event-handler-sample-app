@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.Excep
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.InputScannedDoc;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.JourneyClassification;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Address;
-import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.CcdCollectionElement;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 
@@ -34,8 +33,8 @@ public class ExceptionRecordToCaseTransformerTest {
     @Mock private AddressExtractor addressExtractor;
     @Mock private ExceptionRecordValidator validator;
 
-    @Mock private CcdCollectionElement<ScannedDocument> doc1;
-    @Mock private CcdCollectionElement<ScannedDocument> doc2;
+    @Mock private ScannedDocument doc1;
+    @Mock private ScannedDocument doc2;
     @Mock private Address address;
 
     private ExceptionRecordToCaseTransformer service;
