@@ -1,11 +1,9 @@
 package uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import java.time.LocalDateTime;
 
-@JsonRootName(value = "value")
 public class ScannedDocument {
 
     @JsonProperty

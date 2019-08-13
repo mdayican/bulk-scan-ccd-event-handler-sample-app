@@ -11,7 +11,7 @@ public class SampleCase {
     public final String contactNumber;
     public final String email;
     public final Address address;
-    public final List<ScannedDocument> scannedDocuments;
+    public final List<Item<ScannedDocument>> scannedDocuments;
 
     public SampleCase(
         String legacyId,
@@ -21,7 +21,7 @@ public class SampleCase {
         String contactNumber,
         String email,
         Address address,
-        List<ScannedDocument> scannedDocuments
+        List<Item<ScannedDocument>> scannedDocuments
     ) {
         this.legacyId = legacyId;
         this.firstName = firstName;
