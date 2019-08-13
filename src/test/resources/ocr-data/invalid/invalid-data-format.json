@@ -1,8 +1,21 @@
 {
+  "_comment": "Invalid email and contact_number",
   "ocr_data_fields": [
     {
+      "name": "first_name",
+      "value": "John"
+    },
+    {
+      "name": "last_name",
+      "value": "Smith"
+    },
+    {
+      "name": "date_of_birth",
+      "value": "10-10-2000"
+    },
+    {
       "name": "address_line_1",
-      "value": "12 Victoria Street"
+      "value": "1 Street"
     },
     {
       "name": "address_line_2",
@@ -10,7 +23,11 @@
     },
     {
       "name": "address_line_3",
-      "value": "Victoria"
+      "value": "London"
+    },
+    {
+      "name": "post_code",
+      "value": "1SW1 1ER"
     },
     {
       "name": "post_town",
@@ -18,11 +35,7 @@
     },
     {
       "name": "county",
-      "value": "London"
-    },
-    {
-      "name": "post_code",
-      "value": "SW1 1EA"
+      "value": "county"
     },
     {
       "name": "country",
@@ -30,11 +43,12 @@
     },
     {
       "name": "email",
-      "value": "invalid email"
+      "value": "invalid"
     },
     {
       "name": "contact_number",
-      "value": "invalid phone"
+      "value": "invalid"
     }
   ]
 }
+

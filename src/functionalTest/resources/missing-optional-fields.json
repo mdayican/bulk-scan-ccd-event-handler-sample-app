@@ -1,12 +1,29 @@
 {
+  "_comment": "Missing optional fields post_town and county",
   "ocr_data_fields": [
+    {
+      "name": "first_name",
+      "value": "John"
+    },
+    {
+      "name": "last_name",
+      "value": "Smith"
+    },
+    {
+      "name": "date_of_birth",
+      "value": "2000-10-10"
+    },
     {
       "name": "address_line_1",
       "value": "12 Victoria Street"
     },
     {
-      "name": "email",
-      "value": "test@test.com"
+      "name": "address_line_2",
+      "value": "Victoria Street"
+    },
+    {
+      "name": "address_line_3",
+      "value": "Victoria"
     },
     {
       "name": "post_code",
@@ -17,16 +34,12 @@
       "value": "UK"
     },
     {
+      "name": "email",
+      "value": "xyz@something.com"
+    },
+    {
       "name": "contact_number",
       "value": "7890234567"
-    },
-    {
-      "name": "address_line_2",
-      "value": "Victoria Street"
-    },
-    {
-      "name": "address_line_3",
-      "value": "Victoria"
     }
   ]
 }

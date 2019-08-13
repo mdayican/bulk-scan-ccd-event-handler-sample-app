@@ -1,4 +1,5 @@
 {
+  "_comment": "Duplicate last_name field",
   "ocr_data_fields": [
     {
       "name": "first_name",

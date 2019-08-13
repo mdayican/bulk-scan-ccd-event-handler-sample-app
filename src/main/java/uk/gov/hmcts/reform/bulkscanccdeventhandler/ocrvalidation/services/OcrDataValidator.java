@@ -7,7 +7,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.in.OcrDataField;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -25,7 +24,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.F
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_CODE;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_TOWN;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.CONTACT;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.PERSONAL;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.ERRORS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.SUCCESS;
@@ -38,6 +36,21 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services
 public class OcrDataValidator {
 
     private static final Logger log = LoggerFactory.getLogger(OcrDataValidator.class);
+
+    private static final List<String> personalFormMandatoryFields = asList(FIRST_NAME, LAST_NAME);
+
+    private static final List<String> personalFormOptionalFields = asList(
+        ADDRESS_LINE_1,
+        ADDRESS_LINE_2,
+        ADDRESS_LINE_3,
+        POST_TOWN,
+        COUNTY,
+        COUNTRY,
+        CONTACT_NUMBER,
+        POST_CODE,
+        EMAIL,
+        DATE_OF_BIRTH
+    );
 
     public OcrValidationResult validate(FormType formType, List<OcrDataField> ocrData) {
         List<String> duplicateOcrFields = OcrFormValidationHelper.findDuplicateOcrFields(ocrData);
@@ -63,16 +76,14 @@ public class OcrDataValidator {
         List<String> missingFields = OcrFormValidationHelper.findBlankFields(mandatoryFields, ocrData);
         List<String> errors = OcrFormValidationHelper.getErrorMessagesForMissingFields(missingFields);
 
-        if (formType.equals(CONTACT)) {
-            String email = OcrFormValidationHelper.findOcrFormFieldValue(EMAIL, ocrData);
-            String phone = OcrFormValidationHelper.findOcrFormFieldValue(CONTACT_NUMBER, ocrData);
+        String email = OcrFormValidationHelper.findOcrFormFieldValue(EMAIL, ocrData);
+        String phone = OcrFormValidationHelper.findOcrFormFieldValue(CONTACT_NUMBER, ocrData);
 
-            if (!errors.contains(EMAIL) && !isValidEmailAddress(email)) {
-                errors.add("Invalid email address");
-            }
-            if (!errors.contains(CONTACT_NUMBER) && !isValidPhoneNumber(phone)) {
-                errors.add("Invalid phone number");
-            }
+        if (email != null && !isValidEmailAddress(email)) {
+            errors.add("Invalid email address");
+        }
+        if (phone != null && !isValidPhoneNumber(phone)) {
+            errors.add("Invalid phone number");
         }
 
         return errors;
@@ -87,40 +98,11 @@ public class OcrDataValidator {
     }
 
     private List<String> getMandatoryFieldsForForm(FormType formType) {
-        if (formType.equals(CONTACT)) {
-            return asList(
-                ADDRESS_LINE_1,
-                EMAIL,
-                POST_CODE,
-                COUNTRY,
-                CONTACT_NUMBER
-            );
-
-        } else if (formType.equals(PERSONAL)) {
-            return Arrays.asList(
-                FIRST_NAME,
-                LAST_NAME
-            );
-        }
-
-        log.info("Invalid Form type {}", formType);
-        return emptyList();
+        return formType.equals(PERSONAL) ? personalFormMandatoryFields : emptyList();
     }
 
     private List<String> getOptionalFieldsForForm(FormType formType) {
-        if (formType.equals(CONTACT)) {
-            return asList(
-                ADDRESS_LINE_2,
-                ADDRESS_LINE_3,
-                POST_TOWN,
-                COUNTY
-            );
-        } else if (formType.equals(PERSONAL)) {
-            return singletonList(DATE_OF_BIRTH);
-        }
-
-        log.info("Invalid Form type {}", formType);
-        return emptyList();
+        return formType.equals(PERSONAL) ? personalFormOptionalFields : emptyList();
     }
 
     private ValidationStatus getValidationStatus(boolean errorsExist, boolean warningsExist) {

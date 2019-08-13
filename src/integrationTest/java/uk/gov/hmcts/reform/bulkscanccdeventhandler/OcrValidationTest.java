@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,8 +89,20 @@ class OcrValidationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status").value("WARNINGS"))
             .andExpect(jsonPath("$.errors", hasSize(0)))
-            .andExpect(jsonPath("$.warnings", hasSize(1)))
-            .andExpect(jsonPath("$.warnings[0]").value("date_of_birth is missing"));
+            .andExpect(jsonPath("$.warnings[*]",
+                containsInAnyOrder(
+                    "address_line_1 is missing",
+                    "address_line_2 is missing",
+                    "address_line_3 is missing",
+                    "post_town is missing",
+                    "county is missing",
+                    "country is missing",
+                    "contact_number is missing",
+                    "post_code is missing",
+                    "email is missing",
+                    "date_of_birth is missing"
+                )
+            ));
     }
 
     @Test
@@ -97,7 +110,7 @@ class OcrValidationTest {
         String content = readResource("ocr-data/invalid/invalid-data-format.json");
 
         mvc.perform(
-            post("/forms/CONTACT/validate-ocr")
+            post("/forms/PERSONAL/validate-ocr")
                 .header("ServiceAuthorization", "auth-header-value")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))

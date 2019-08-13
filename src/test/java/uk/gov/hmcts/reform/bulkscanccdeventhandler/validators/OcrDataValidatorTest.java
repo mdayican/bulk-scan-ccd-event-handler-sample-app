@@ -24,7 +24,6 @@ import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.F
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.LAST_NAME;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_CODE;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.POST_TOWN;
-import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.CONTACT;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.FormType.PERSONAL;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.ERRORS;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.model.out.ValidationStatus.SUCCESS;
@@ -34,7 +33,7 @@ class OcrDataValidatorTest {
     private final OcrDataValidator validator = new OcrDataValidator();
 
     @Test
-    void should_return_errors_when_mandatory_fields_are_missing() {
+    void should_return_errors_and_warnings_when_mandatory_and_optional_fields_are_missing() {
         // given
         List<OcrDataField> ocrDataFields = singletonList(new OcrDataField(FIRST_NAME, "test"));
 
@@ -45,9 +44,53 @@ class OcrDataValidatorTest {
         assertThat(result).isNotNull();
         assertThat(result)
             .extracting("errors", "warnings", "status")
+            .containsExactlyInAnyOrder(
+                singletonList("last_name is missing"),
+                asList(
+                    "address_line_1 is missing",
+                    "address_line_2 is missing",
+                    "address_line_3 is missing",
+                    "post_town is missing",
+                    "county is missing",
+                    "country is missing",
+                    "contact_number is missing",
+                    "post_code is missing",
+                    "email is missing",
+                    "date_of_birth is missing"
+                ),
+                ValidationStatus.ERRORS
+            );
+    }
+
+    @Test
+    void should_return_errors_and_warnings_when_mandatory_fields_are_empty_and_optional_fields_are_missing() {
+        // given
+        List<OcrDataField> ocrDataFields = asList(
+            new OcrDataField(FIRST_NAME, "test"),
+            new OcrDataField(LAST_NAME, ""),
+            new OcrDataField(DATE_OF_BIRTH, "01-01-1990")
+        );
+
+        // when
+        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result)
+            .extracting("errors", "warnings", "status")
             .containsExactly(
                 singletonList("last_name is missing"),
-                singletonList("date_of_birth is missing"),
+                asList(
+                    "address_line_1 is missing",
+                    "address_line_2 is missing",
+                    "address_line_3 is missing",
+                    "post_town is missing",
+                    "county is missing",
+                    "country is missing",
+                    "contact_number is missing",
+                    "post_code is missing",
+                    "email is missing"
+                ),
                 ValidationStatus.ERRORS
             );
     }
@@ -83,7 +126,16 @@ class OcrDataValidatorTest {
             new OcrDataField(FIRST_NAME, "test"),
             new OcrDataField(LAST_NAME, "name"),
             new OcrDataField(DATE_OF_BIRTH, "01-01-1990"),
-            new OcrDataField("unrecognised_field", "xyz")
+            new OcrDataField("unrecognised_field", "xyz"),
+            new OcrDataField(ADDRESS_LINE_1, "1 Street"),
+            new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
+            new OcrDataField(ADDRESS_LINE_3, "London"),
+            new OcrDataField(POST_TOWN, "LONDON"),
+            new OcrDataField(POST_CODE, "SW1 1ER"),
+            new OcrDataField(COUNTY, "county"),
+            new OcrDataField(COUNTRY, "UK"),
+            new OcrDataField(EMAIL, "xyz@something.com"),
+            new OcrDataField(CONTACT_NUMBER, "0123456789")
         );
 
         // when
@@ -97,57 +149,21 @@ class OcrDataValidatorTest {
     }
 
     @Test
-    void should_return_errors_when_mandatory_fields_are_empty() {
-        // given
-        List<OcrDataField> ocrDataFields = asList(
-            new OcrDataField(FIRST_NAME, "test"),
-            new OcrDataField(LAST_NAME, ""),
-            new OcrDataField(DATE_OF_BIRTH, "01-01-1990")
-        );
-
-        // when
-        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
-
-        // then
-        assertThat(result).isNotNull();
-        assertThat(result)
-            .extracting("errors", "warnings", "status")
-            .containsExactly(
-                singletonList("last_name is missing"),
-                emptyList(),
-                ValidationStatus.ERRORS
-            );
-    }
-
-    @Test
-    void should_return_warnings_when_optional_fields_are_empty() {
-        // given
-        List<OcrDataField> ocrDataFields = asList(
-            new OcrDataField(FIRST_NAME, "test"),
-            new OcrDataField(LAST_NAME, "test")
-        );
-
-        // when
-        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
-
-        // then
-        assertThat(result).isNotNull();
-        assertThat(result)
-            .extracting("errors", "warnings", "status")
-            .containsExactly(
-                emptyList(),
-                singletonList("date_of_birth is missing"),
-                ValidationStatus.WARNINGS
-            );
-    }
-
-    @Test
     void should_return_no_errors_when_ocr_data_contains_values_for_all_form_fields() {
         // given
         List<OcrDataField> ocrDataFields = asList(
             new OcrDataField(FIRST_NAME, "test"),
             new OcrDataField(LAST_NAME, "name"),
-            new OcrDataField(DATE_OF_BIRTH, "01-01-1990")
+            new OcrDataField(DATE_OF_BIRTH, "01-01-1990"),
+            new OcrDataField(ADDRESS_LINE_1, "1 Street"),
+            new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
+            new OcrDataField(ADDRESS_LINE_3, "London"),
+            new OcrDataField(POST_TOWN, "LONDON"),
+            new OcrDataField(POST_CODE, "SW1 1ER"),
+            new OcrDataField(COUNTY, "county"),
+            new OcrDataField(COUNTRY, "UK"),
+            new OcrDataField(EMAIL, "xyz@something.com"),
+            new OcrDataField(CONTACT_NUMBER, "0123456789")
         );
 
         // when
@@ -164,6 +180,10 @@ class OcrDataValidatorTest {
     void should_validate_email_format_and_return_errors_for_invalid_value() {
         // given
         List<OcrDataField> ocrDataFields = asList(
+            new OcrDataField(FIRST_NAME, "test"),
+            new OcrDataField(LAST_NAME, "name"),
+            new OcrDataField(DATE_OF_BIRTH, "01-01-1990"),
+            new OcrDataField("unrecognised_field", "xyz"),
             new OcrDataField(ADDRESS_LINE_1, "1 Street"),
             new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
             new OcrDataField(ADDRESS_LINE_3, "London"),
@@ -171,12 +191,12 @@ class OcrDataValidatorTest {
             new OcrDataField(POST_CODE, "SW1 1ER"),
             new OcrDataField(COUNTY, "county"),
             new OcrDataField(COUNTRY, "UK"),
-            new OcrDataField(EMAIL, "xyz"), //invalid email address
+            new OcrDataField(EMAIL, "xyz@"),
             new OcrDataField(CONTACT_NUMBER, "0123456789")
         );
 
         // when
-        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
+        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
 
         // then
         assertThat(result).isNotNull();
@@ -193,6 +213,10 @@ class OcrDataValidatorTest {
     void should_validate_phone_number_and_return_errors_for_invalid_value() {
         // given
         List<OcrDataField> ocrDataFields = asList(
+            new OcrDataField(FIRST_NAME, "test"),
+            new OcrDataField(LAST_NAME, "name"),
+            new OcrDataField(DATE_OF_BIRTH, "01-01-1990"),
+            new OcrDataField("unrecognised_field", "xyz"),
             new OcrDataField(ADDRESS_LINE_1, "1 Street"),
             new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
             new OcrDataField(ADDRESS_LINE_3, "London"),
@@ -200,12 +224,12 @@ class OcrDataValidatorTest {
             new OcrDataField(POST_CODE, "SW1 1ER"),
             new OcrDataField(COUNTY, "county"),
             new OcrDataField(COUNTRY, "UK"),
-            new OcrDataField(EMAIL, "test@test.com"),
+            new OcrDataField(EMAIL, "xyz@something.com"),
             new OcrDataField(CONTACT_NUMBER, "invalid") //invalid phone number
         );
 
         // when
-        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
+        OcrValidationResult result = validator.validate(PERSONAL, ocrDataFields);
 
         // then
         assertThat(result).isNotNull();
@@ -217,60 +241,4 @@ class OcrDataValidatorTest {
                 ERRORS
             );
     }
-
-    @Test
-    void should_return_warnings_when_contact_form_optional_fields_are_missing() {
-        // given
-        List<OcrDataField> ocrDataFields = asList(
-            new OcrDataField(ADDRESS_LINE_1, "1 Street"),
-            new OcrDataField(POST_CODE, "SW1 1ER"),
-            new OcrDataField(COUNTY, "county"),
-            new OcrDataField(COUNTRY, "UK"),
-            new OcrDataField(EMAIL, "test@test.com"),
-            new OcrDataField(CONTACT_NUMBER, "0123456789")
-        );
-
-        // when
-        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
-
-        // then
-        assertThat(result).isNotNull();
-        assertThat(result)
-            .extracting("errors", "warnings", "status")
-            .containsExactly(
-                emptyList(),
-                asList(
-                    "address_line_2 is missing",
-                    "address_line_3 is missing",
-                    "post_town is missing"
-                ),
-                ValidationStatus.WARNINGS
-            );
-    }
-
-    @Test
-    void should_return_success_when_contact_form_fields_format_is_valid() {
-        // given
-        List<OcrDataField> ocrDataFields = asList(
-            new OcrDataField(ADDRESS_LINE_1, "1 Street"),
-            new OcrDataField(ADDRESS_LINE_2, "Victoria Street"),
-            new OcrDataField(ADDRESS_LINE_3, "London"),
-            new OcrDataField(POST_TOWN, "LONDON"),
-            new OcrDataField(POST_CODE, "SW1 1ER"),
-            new OcrDataField(COUNTY, "county"),
-            new OcrDataField(COUNTRY, "UK"),
-            new OcrDataField(EMAIL, "test@test.com"), //valid email format
-            new OcrDataField(CONTACT_NUMBER, "0123456789") //valid phone number format
-        );
-
-        // when
-        OcrValidationResult result = validator.validate(CONTACT, ocrDataFields);
-
-        // then
-        assertThat(result).isNotNull();
-        assertThat(result)
-            .extracting("errors", "warnings", "status")
-            .containsExactly(emptyList(), emptyList(), SUCCESS);
-    }
-
 }
