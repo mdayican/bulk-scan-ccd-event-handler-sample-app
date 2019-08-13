@@ -40,7 +40,6 @@ public class ExceptionRecordValidatorTest {
         // then
         assertThat(exc)
             .isInstanceOf(InvalidExceptionRecordException.class)
-            .hasMessageContaining("Missing required fields")
             .hasMessageContaining(FIRST_NAME)
             .hasMessageContaining(LAST_NAME);
     }

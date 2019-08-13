@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.in.Excep
 
 import java.util.Set;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Component
@@ -21,7 +22,9 @@ public class ExceptionRecordValidator {
             );
 
         if (!missingFields.isEmpty()) {
-            throw new InvalidExceptionRecordException("Missing required fields: " + String.join(", ", missingFields));
+            throw new InvalidExceptionRecordException(
+                missingFields.stream().map(it -> "'" + it + "' is required").collect(toList())
+            );
         }
     }
 }

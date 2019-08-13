@@ -103,7 +103,7 @@ public class ExceptionRecordToCaseTransformerTest {
     @Test
     public void should_validate_exception_record() {
         // given
-        doThrow(new InvalidExceptionRecordException("msg"))
+        doThrow(new InvalidExceptionRecordException(asList("error1", "error2")))
             .when(validator).assertIsValid(any());
 
         // when
@@ -114,6 +114,7 @@ public class ExceptionRecordToCaseTransformerTest {
         // then
         assertThat(exc)
             .isInstanceOf(InvalidExceptionRecordException.class)
-            .hasMessage("msg");
+            .hasMessageContaining("error1")
+            .hasMessageContaining("error2");
     }
 }
