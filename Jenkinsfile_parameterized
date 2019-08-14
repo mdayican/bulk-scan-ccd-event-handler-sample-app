@@ -15,8 +15,10 @@ properties([
   pipelineTriggers([[$class: 'GitHubPushTrigger']])
 ])
 
-List<LinkedHashMap<String, Object>> secrets = [
-  secret('bulk-scan-sample-app-tests-s2s-secret', 'TEST_S2S_SECRET')
+def secrets = [
+  's2s-${env}': [
+    secret('microservicekey-bulk-scan-sample-app-tests', 'TEST_S2S_SECRET')
+  ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
