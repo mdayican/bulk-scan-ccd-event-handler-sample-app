@@ -32,7 +32,8 @@ public class ExceptionRecordToCaseTransformerTest {
 
     @Mock private DocumentMapper documentMapper;
     @Mock private AddressExtractor addressExtractor;
-    @Mock private ExceptionRecordValidator validator;
+    @Mock private ExceptionRecordValidator exceptionRecordValidator;
+    @Mock private CaseValidator caseValidator;
 
     @Mock private Item<ScannedDocument> doc1;
     @Mock private Item<ScannedDocument> doc2;
@@ -46,7 +47,8 @@ public class ExceptionRecordToCaseTransformerTest {
             new ExceptionRecordToCaseTransformer(
                 documentMapper,
                 addressExtractor,
-                validator
+                exceptionRecordValidator,
+                caseValidator
             );
     }
 
@@ -75,14 +77,14 @@ public class ExceptionRecordToCaseTransformerTest {
         given(addressExtractor.extractFrom(er.ocrDataFields)).willReturn(address);
         given(documentMapper.toCaseDoc(er.scannedDocuments.get(0), er.id)).willReturn(doc1);
         given(documentMapper.toCaseDoc(er.scannedDocuments.get(1), er.id)).willReturn(doc2);
-
+        given(caseValidator.getWarnings(any())).willReturn(asList("w1", "w2"));
         // when
         SuccessfulTransformationResponse result = service.toCase(er);
 
         // then
 
         assertSoftly(softly -> {
-            softly.assertThat(result.warnings).isEmpty();
+            softly.assertThat(result.warnings).containsExactly("w1", "w2");
 
             softly.assertThat(result.caseCreationDetails.caseTypeId).isEqualTo(CASE_TYPE_ID);
             softly.assertThat(result.caseCreationDetails.eventId).isEqualTo(EVENT_ID);
@@ -104,7 +106,7 @@ public class ExceptionRecordToCaseTransformerTest {
     public void should_validate_exception_record() {
         // given
         doThrow(new InvalidExceptionRecordException(asList("error1", "error2")))
-            .when(validator).assertIsValid(any());
+            .when(exceptionRecordValidator).assertIsValid(any());
 
         // when
         Throwable exc = catchThrowable(

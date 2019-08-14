@@ -6,7 +6,6 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Case
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SampleCase;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.CONTACT_NUMBER;
 import static uk.gov.hmcts.reform.bulkscanccdeventhandler.common.OcrFieldNames.DATE_OF_BIRTH;
@@ -24,22 +23,25 @@ public class ExceptionRecordToCaseTransformer {
 
     private final DocumentMapper documentMapper;
     private final AddressExtractor addressExtractor;
-    private final ExceptionRecordValidator validator;
+    private final ExceptionRecordValidator exceptionRecordValidator;
+    private final CaseValidator caseValidator;
 
     // region constructor
     public ExceptionRecordToCaseTransformer(
         DocumentMapper documentMapper,
         AddressExtractor addressExtractor,
-        ExceptionRecordValidator validator
+        ExceptionRecordValidator exceptionRecordValidator,
+        CaseValidator caseValidator
     ) {
         this.documentMapper = documentMapper;
         this.addressExtractor = addressExtractor;
-        this.validator = validator;
+        this.exceptionRecordValidator = exceptionRecordValidator;
+        this.caseValidator = caseValidator;
     }
     // endregion
 
     public SuccessfulTransformationResponse toCase(ExceptionRecord exceptionRecord) {
-        validator.assertIsValid(exceptionRecord);
+        exceptionRecordValidator.assertIsValid(exceptionRecord);
 
         SampleCase caseData = buildCase(exceptionRecord);
 
@@ -49,7 +51,7 @@ public class ExceptionRecordToCaseTransformer {
                 EVENT_ID,
                 caseData
             ),
-            emptyList() // TODO: build warnings
+            caseValidator.getWarnings(caseData)
         );
     }
 
