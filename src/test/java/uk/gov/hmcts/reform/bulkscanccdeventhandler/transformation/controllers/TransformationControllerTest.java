@@ -24,6 +24,7 @@ import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.Samp
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ScannedDocument;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.SuccessfulTransformationResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.ExceptionRecordToCaseTransformer;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.InvalidExceptionRecordException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
@@ -35,6 +36,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -160,6 +162,23 @@ public class TransformationControllerTest {
             .andExpect(jsonPath("$.case_creation_details.case_data.scannedDocuments[1].value.exceptionRecordReference").value("ref-2"))
             .andExpect(jsonPath("$.warnings[0]").value("warning-1"))
             .andExpect(jsonPath("$.warnings[1]").value("warning-2"));
+    }
+
+    @Test
+    void should_return_400_with_errors_if_transformation_failed() throws Exception {
+        given(transformer.toCase(any()))
+            .willThrow(new InvalidExceptionRecordException(
+                asList(
+                    "error-1",
+                    "error-2"
+                )
+            ));
+
+        sendRequest("{}")
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errors[0]").value("error-1"))
+            .andExpect(jsonPath("$.errors[1]").value("error-2"));
     }
 
     private ResultActions sendRequest(String body) throws Exception {
