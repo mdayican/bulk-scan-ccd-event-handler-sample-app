@@ -154,6 +154,22 @@ class OcrValidationControllerTest {
             .hasMessageContaining("Form type 'invalid-form-type' not found");
     }
 
+    @Test
+    void should_return_form_not_found_exception_when_form_type_case_does_not_match() throws Exception {
+        given(authService.authenticate("testServiceAuthHeader")).willReturn("testServiceName");
+        MvcResult mvcResult = mockMvc
+            .perform(
+                post("/forms/Personal/validate-ocr") //only PERSONAL is valid form type
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .header("ServiceAuthorization", "testServiceAuthHeader")
+                    .content(readResource("ocr-data/invalid/invalid-form-type.json"))
+            ).andReturn();
+
+        assertThat(mvcResult.getResolvedException())
+            .isInstanceOf(FormNotFoundException.class)
+            .hasMessageContaining("Form type 'Personal' not found");
+    }
+
     private String readResource(final String fileName) throws IOException {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
     }

@@ -59,7 +59,7 @@ public class OcrValidationController {
         @PathVariable(name = "form-type", required = false) String formType,
         @Valid @RequestBody OcrDataValidationRequest request
     ) {
-        if (!EnumUtils.isValidEnumIgnoreCase(FormType.class, formType)) {
+        if (!EnumUtils.isValidEnum(FormType.class, formType)) {
             throw new FormNotFoundException("Form type '" + formType + "' not found");
         }
 
