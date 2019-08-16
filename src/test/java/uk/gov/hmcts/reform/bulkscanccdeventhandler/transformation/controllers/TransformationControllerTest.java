@@ -165,7 +165,7 @@ public class TransformationControllerTest {
     }
 
     @Test
-    void should_return_400_with_errors_if_transformation_failed() throws Exception {
+    void should_return_422_with_errors_if_transformation_failed() throws Exception {
         given(transformer.toCase(any()))
             .willThrow(new InvalidExceptionRecordException(
                 asList(
@@ -176,7 +176,7 @@ public class TransformationControllerTest {
 
         sendRequest("{}")
             .andDo(print())
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isUnprocessableEntity())
             .andExpect(jsonPath("$.errors[0]").value("error-1"))
             .andExpect(jsonPath("$.errors[1]").value("error-2"));
     }
