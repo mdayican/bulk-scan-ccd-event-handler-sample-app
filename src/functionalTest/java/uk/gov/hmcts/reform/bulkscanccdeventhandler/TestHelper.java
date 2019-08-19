@@ -48,8 +48,10 @@ class TestHelper {
             .baseUri(s2sUrl)
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .body(params)
+            .log().all()
             .when()
             .post("/lease")
+            .prettyPeek()
             .andReturn();
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -66,8 +68,10 @@ class TestHelper {
             .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .baseUri(testUrl)
             .body(body)
+            .log().all()
             .when()
             .post(location)
+            .prettyPeek()
             .andReturn();
     }
 
