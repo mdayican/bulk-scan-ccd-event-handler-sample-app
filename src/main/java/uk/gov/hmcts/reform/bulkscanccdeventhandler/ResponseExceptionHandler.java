@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.ForbiddenException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.common.auth.UnauthenticatedException;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.ocrvalidation.services.exceptions.FormNotFoundException;
+import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ApiError;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.model.out.ErrorResponse;
 import uk.gov.hmcts.reform.bulkscanccdeventhandler.transformation.services.InvalidExceptionRecordException;
 
@@ -25,29 +26,30 @@ import static org.springframework.http.ResponseEntity.status;
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ResponseExceptionHandler.class);
+    private static final ApiError API_ERROR_FORBIDDEN = new ApiError("S2S token is not authorized to use the service");
 
     @ExceptionHandler(InvalidTokenException.class)
-    protected ResponseEntity<String> handleInvalidTokenException(InvalidTokenException exc) {
+    protected ResponseEntity<ApiError> handleInvalidTokenException(InvalidTokenException exc) {
         log.warn(exc.getMessage(), exc);
-        return status(UNAUTHORIZED).body(exc.getMessage());
+        return status(UNAUTHORIZED).body(new ApiError(exc.getMessage()));
     }
 
     @ExceptionHandler(UnauthenticatedException.class)
-    protected ResponseEntity<String> handleUnauthenticatedException(UnauthenticatedException exc) {
+    protected ResponseEntity<ApiError> handleUnauthenticatedException(UnauthenticatedException exc) {
         log.warn(exc.getMessage(), exc);
-        return status(UNAUTHORIZED).body(exc.getMessage());
+        return status(UNAUTHORIZED).body(new ApiError(exc.getMessage()));
     }
 
     @ExceptionHandler(FormNotFoundException.class)
-    protected ResponseEntity<String> handleFormNotFoundException(FormNotFoundException exc) {
+    protected ResponseEntity<ApiError> handleFormNotFoundException(FormNotFoundException exc) {
         log.warn(exc.getMessage(), exc);
-        return status(NOT_FOUND).body(exc.getMessage());
+        return status(NOT_FOUND).body(new ApiError(exc.getMessage()));
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    protected ResponseEntity<String> handleForbiddenException(ForbiddenException exc) {
+    protected ResponseEntity<ApiError> handleForbiddenException(ForbiddenException exc) {
         log.warn(exc.getMessage(), exc);
-        return status(FORBIDDEN).body("S2S token is not authorized to use the service");
+        return status(FORBIDDEN).body(API_ERROR_FORBIDDEN);
     }
 
     @ExceptionHandler(InvalidExceptionRecordException.class)

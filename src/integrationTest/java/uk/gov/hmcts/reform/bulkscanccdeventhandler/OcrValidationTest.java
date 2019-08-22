@@ -17,8 +17,10 @@ import java.io.IOException;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @AutoConfigureMockMvc
 @ComponentScan(basePackages = "...", lazyInit = true)
@@ -130,7 +132,10 @@ class OcrValidationTest {
             post("/forms/PERSONAL/validate-ocr")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.error").value("Provided S2S token is missing or invalid"))
+            .andExpect(content().string("{\"error\":\"Provided S2S token is missing or invalid\"}"));
+
     }
 
     private String readResource(final String fileName) throws IOException {
