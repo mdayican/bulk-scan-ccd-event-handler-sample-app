@@ -133,7 +133,7 @@ class OcrValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
             .andExpect(status().isUnauthorized())
-            .andExpect(content().string("{\"error\":\"Provided S2S token is missing or invalid\"}"));
+            .andExpect(content().json("{\"error\":\"Provided S2S token is missing or invalid\"}"));
 
     }
 

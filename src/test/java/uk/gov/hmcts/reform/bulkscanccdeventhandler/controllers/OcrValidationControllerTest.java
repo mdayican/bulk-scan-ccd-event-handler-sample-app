@@ -86,7 +86,7 @@ class OcrValidationControllerTest {
                     .content(requestBody)
             )
             .andExpect(status().isForbidden())
-            .andExpect(content().string("{\"error\":\"S2S token is not authorized to use the service\"}"));
+            .andExpect(content().json("{\"error\":\"S2S token is not authorized to use the service\"}"));
     }
 
     @Test
@@ -146,7 +146,7 @@ class OcrValidationControllerTest {
                     .content(readResource("ocr-data/invalid/invalid-form-type.json"))
             )
             .andExpect(status().isNotFound())
-            .andExpect(content().string("{\"error\":\"Form type 'invalid-form-type' not found\"}"))
+            .andExpect(content().json("{\"error\":\"Form type 'invalid-form-type' not found\"}"))
             .andReturn();
 
         assertThat(mvcResult.getResolvedException())
