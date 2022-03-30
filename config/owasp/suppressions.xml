@@ -17,14 +17,6 @@
   </suppress>
 
   <suppress>
-    <notes><![CDATA[
-      used in the smoke tests and functional tests.
-    ]]></notes>
-    <cpe regex="true">^a:apache:groovy:2\.5\.6$</cpe>
-    <cve>CVE-2016-6497</cve>
-  </suppress>
-
-  <suppress>
     <notes><![CDATA[Nested dependency of adal4j. Microsoft needs to update strong relation of this library in ServiceBus]]></notes>
     <gav regex="true">^org\.apache\.sling:org\.apache\.sling\.javax\.activation:0\.1\.0$</gav>
     <cve>CVE-2013-4390</cve>
